@@ -1,0 +1,46 @@
+from django.conf import settings as _s
+import urllib2,urllib
+from universal import explodeParams
+from django.utils import simplejson as _j
+import time,copy
+import sys
+class WB(object):
+	
+	def __init__(self):
+		self.token=""
+		self.rtoken=""
+	
+	def getToken(self,code,redirect_uri):
+		params={}
+		params['grant_type']='authorization_code'
+		params['redirect_uri']=redirect_uri
+		params['client_id']=_s.WB_APIKEY
+		params['client_secret']=_s.WB_SECRET
+		params['code']=code
+		url=urllib2.urlopen(_s.WB_AUTH_URL+"access_token",urllib.urlencode(params))
+		result=url.read()
+		result=_j.loads(result)
+		self.token=result['access_token']
+		self.uid=result['uid']
+		return result
+		
+	def initAPI(self):
+		self.users=self.Users(self.token)
+		self.inited=True
+			
+
+
+	class Users(object):
+		
+		def __init__(self,token):
+			self.token=token
+			self.default_params={}
+			self.default_params['access_token']=token	
+		def show(self,uid):
+			params=copy.deepcopy(self.default_params)
+			params['uid']=uid
+			params=explodeParams(params)
+			request_url=_s.WB_API_URL+"users/show.json?"+params
+			url=urllib2.urlopen(request_url)
+			result=url.read()
+			return result

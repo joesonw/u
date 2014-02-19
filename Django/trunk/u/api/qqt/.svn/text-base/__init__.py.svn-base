@@ -1,0 +1,78 @@
+from django.conf import settings as _s
+import urllib2,urllib
+from django.utils import simplejson as _j	
+from universal import explodeParams
+import time,copy
+import sys
+
+
+class QQT(object):
+	
+	def __init__(self,ip):
+		self.token=""
+		self.rtoken=""
+		self.openid=""
+		self.ip=ip
+	
+	def getToken(self,code,redirect_uri):
+		request_url=_s.QQT_AUTH_URL+"access_token?grant_type=authorization_code"
+		request_url+="&redirect_uri="+redirect_uri
+		request_url+="&client_secret="+_s.QQT_SECRET
+		request_url+="&code="+code
+		request_url+="&client_id="+_s.QQT_APIKEY
+		url=urllib2.urlopen(request_url)
+		result=url.read()
+		arr=result.split("&")
+		self.token=arr[0].split("=")[1]
+		self.expires_in=arr[1].split("=")[1]
+		self.refresh_token=arr[2].split("=")[1]
+		self.openid=arr[3].split("=")[1]
+		self.name=arr[4].split("=")[1]
+		self.nick=arr[5].split("=")[1]
+		result={}
+		result['access_token']=self.token
+		result['expires_in']=self.expires_in
+		result['refresh_token']=self.refresh_token
+		result['openid']=self.openid
+		result['name']=self.name
+		result['nick']=self.nick
+		return result
+				
+	def initAPI(self):
+		self.t=self.T(self.token)
+		self.user=self.User(self.token,self.ip,self.openid)
+		self.inited=True
+			
+
+
+	class T(object):
+		
+		def __init__(self,token):
+			self.token=token
+			self.default_params={}
+			self.default_params['v']='1.0'
+			self.default_params['format']='JSON'
+			self.default_params['access_token']=token	
+		
+		def list(self,ids):
+			pass
+			
+	class User(object):
+		
+		def __init__(self,token,ip,openid):
+			self.token=token
+			self.default_params={}
+			self.default_params['oauth_version']='2.a'
+			self.default_params['format']='json'
+			self.default_params['access_token']=token
+			self.default_params['oauth_consumer_key']=_s.QQT_APIKEY
+			self.default_params['clientip']=ip
+			self.default_params['openid']=openid
+		
+		def info(self):
+			request_url=_s.QQT_API_URL+"user/info?"
+			params=explodeParams(copy.deepcopy(self.default_params))
+			request_url+=params
+			url=urllib2.urlopen(request_url)
+			result=url.read()
+			return result

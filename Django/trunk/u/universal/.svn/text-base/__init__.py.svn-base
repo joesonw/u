@@ -1,0 +1,40 @@
+import hashlib
+from django.conf import settings as _s
+
+def md5(arg):
+	m = hashlib.md5()
+	m.update(arg)
+	return m.hexdigest()
+	
+def explodePerms(arr):
+	re=""
+	l=len(arr)
+	for i in range(0,l-1):
+		re+=arr[i]+"+"
+	re+=arr[l-1]
+	return re
+
+def getSig(params):
+	s=""
+	for k in sorted(params.iterkeys()):
+		s+=(str(k)+"="+str(params[k]))
+	s+=_s.RENREN_SECRET
+	return md5(s)
+
+def explodeParams(arr):
+	result=""
+	for k in sorted(arr.iterkeys()):
+		result+=(str(k)+"="+str(arr[k])+"&")
+	result=result[:-1]
+	return result
+def escape(s):
+        result=s
+        result=result.replace("%","%25")
+        result=result.replace("+","%2B")
+        result=result.replace(" ","%20")
+        result=result.replace("/","%2F")
+        result=result.replace("?","%3F")
+        result=result.replace("#","%23")
+        result=result.replace("&","%26")
+        result=result.replace("=","%3D")
+        return result

@@ -1,0 +1,29 @@
+from universal import explodePerms,getSig
+import urllib,urllib2
+import time
+from django.conf import settings as _s
+from django.utils import simplejson as _j
+
+v="1.0"
+format="JSON"
+def upload(token,upload,caption="",aid="",place_id=""):
+	params={}
+	if caption:
+		params['caption']=caption
+	if aid:
+		params['aid']=aid
+	if place_id:
+		params['place_id']=place_id
+	params['access_token']=token
+	params['v']=v
+	params['format']=format
+	params['call_id']=int(time.time())
+	params['method']='photos.upload'
+	params['upload']=upload
+	params['sig']=getSig(params)
+	result=urllib2.urlopen(_s.RENREN_API_URL,urllib.urlencode(params))
+	result=_j.loads(result.read())
+	return result
+	
+	
+	

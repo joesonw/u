@@ -1,0 +1,13 @@
+{% load dajaxice_templatetags %}
+<html>
+<head>
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+  <title>{% block title %}{% endblock %}</title>
+  <!-- more user's own js -->
+  {% dajaxice_js_import %}
+</head>
+<body>
+{% block body %}
+{% endblock %}
+</body>
+</html>

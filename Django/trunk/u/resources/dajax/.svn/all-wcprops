@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/5/trunk/u/resources/dajax
+END
+mootools.dajax.core.js
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/5/trunk/u/resources/dajax/mootools.dajax.core.js
+END
+dojo.dajax.core.js
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/5/trunk/u/resources/dajax/dojo.dajax.core.js
+END
+jquery.dajax.core.js
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/5/trunk/u/resources/dajax/jquery.dajax.core.js
+END
+ajax-csrf.js
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/5/trunk/u/resources/dajax/ajax-csrf.js
+END
+prototype.dajax.core.js
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/5/trunk/u/resources/dajax/prototype.dajax.core.js
+END

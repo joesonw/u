@@ -1,0 +1,44 @@
+body {
+	background-color: #2dd700;
+}
+div#step_one {
+	
+	width: 60%
+	
+}
+div#register {
+
+	background-color: #85eb6a;
+	position: absolute;
+	border-radius: 10px;
+	width: 70%;
+	height: 80%;
+	top: 10%;
+	right: 15%;
+}
+div#header {
+	background-color: #5feb3b;
+	width: 100%;
+	height: 30px;
+	margin-top: -10px;
+	border-radius: 10px 10px 0 0;
+}
+div#step_one {
+	width:100%;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top: 40px;
+}
+div#step_two {
+	width:100%;
+	text-align: center;
+	margin-top:100px;
+	vertical-align: baseline;
+}
+ul#header{
+	left: 0px;
+}
+li.header{
+	list-style-type: none;
+	float: left;
+}

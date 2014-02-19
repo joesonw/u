@@ -1,0 +1,27 @@
+{% load staticfiles %}
+<html>
+<head>
+  {% load dajaxice_templatetags %}
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+  <title>Renren Login</title>
+  <!-- more user's own js -->
+  <script src="http://code.jquery.com/jquery-1.8.3.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="/resources/js/ajax-csrf.js"></script>
+  <script src="/resources/dajax/jquery.dajax.core.js" type="text/javascript" charset="utf-8"></script>
+  
+  {% dajaxice_js_import %}
+  <script language='javascript'>
+  	var aj=$.get("{{url}}",{ {% for item in params %} "{{item.k}}":"{{item.v}}", {% endfor %} })
+  	aj.success(function() { alert("success"); })
+  	aj.error(function() { alert("error"); })
+  	aj.crossDomain=true;
+  	var aj2=$.get("{{url2}}")
+  	aj2.success(function() { alert("success"); })
+  	aj2.error(function() { alert("error"); })
+  </script>
+</head>
+<body>
+{{url2}}
+
+</body>
+</html>

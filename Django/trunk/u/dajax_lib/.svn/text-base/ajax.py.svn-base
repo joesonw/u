@@ -1,0 +1,10 @@
+from dajaxice.decorators import dajaxice_register
+from dajax.core import Dajax
+from django.utils import simplejson as _j
+from django.conf import settings as _s
+
+from universal import explodePerms
+
+@dajaxice_register(method='get')
+def register(request,email,pwd):
+	return _j.dumps({'result':True})

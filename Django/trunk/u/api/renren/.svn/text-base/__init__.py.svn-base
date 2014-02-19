@@ -1,0 +1,106 @@
+from django.conf import settings as _s
+import urllib2,urllib
+from django.utils import simplejson as _j	
+from universal import explodePerms,getSig
+import time,copy
+import sys
+class Renren(object):
+	
+	def __init__(self):
+		self.token=""
+		self.rtoken=""
+	
+	def getToken(self,code,redirect_uri):
+		request_url=_s.RENREN_AUTH_URL+"token?grant_type=authorization_code"
+		request_url+="&redirect_uri="+redirect_uri
+		request_url+="&client_secret="+_s.RENREN_SECRET
+		request_url+="&code="+code
+		request_url+="&client_id="+_s.RENREN_APIKEY
+		url=urllib2.urlopen(request_url)
+		result=url.read()
+		result=_j.loads(result)
+		self.token=result['access_token']
+		return result
+		
+	def initAPI(self):
+		self.users=self.Users(self.token)
+		self.status=self.Status(self.token)
+		self.feed=self.Feed(self.token)
+		self.inited=True
+			
+        class Feed(object):
+		
+		def __init__(self,token):
+                        self.token=token
+			self.default_params={}
+			self.default_params['v']='1.0'
+			self.default_params['format']='JSON'
+			self.default_params['access_token']=token
+		def get(self,feedtype,uid='',page='',count=''):
+                        params=copy.deepcopy(self.default_params)
+                        if feedtype=='all':
+                                params['type']='10,11,20,21,22,23,30,31,32,33,34,35,36,40,41,50,51,52,53,54,55'
+                        else:
+                                params['type']=feedtype
+                        if uid:
+                                params['uid']=uid
+                        if page:
+                                params['page']=page
+                        if count:
+                                params['count']=count
+                        params['method']='feed.get'
+                        params['call_id']=time.time
+			params['sig']=getSig(params)
+			try:
+				url=urllib2.urlopen(_s.RENREN_API_URL,urllib.urlencode(params))				
+				result=url.read()
+			except:
+				print "error(s) occured when communicating with api server"
+				result=None
+			return result
+                        
+
+	class Users(object):
+		
+		def __init__(self,token):
+			self.token=token
+			self.default_params={}
+			self.default_params['v']='1.0'
+			self.default_params['format']='JSON'
+			self.default_params['access_token']=token			
+			
+		def getInfo(self,uids='',fields=''):
+			params=copy.deepcopy(self.default_params)
+			if uids:
+				params['uids']=uids
+			if fields:
+				if fields=="all":
+					params['fields']="uid,name,sex,star,zidou,vip,birthday,tinyurl,headurl,mainurl,hometown_location,work_history,university_history"
+				else:
+					params['fields']=fields
+			params['method']="users.getInfo"
+			params['call_id']=time.time
+			params['sig']=getSig(params)
+			try:
+				url=urllib2.urlopen(_s.RENREN_API_URL,urllib.urlencode(params))				
+				result=url.read()
+			except:
+				print "error(s) occured when communicating with api server"
+				result=None
+			return result
+			
+			
+	class Status(object):
+		
+		def __init__(self,token):
+			self.token=token
+			self.default_params={}
+			self.default_params['v']='1.0'
+			self.default_params['format']='JSON'
+			self.default_params['access_token']=token	
+		
+		def set(self,status,place_id=''):
+			pass
+			
+		def gets(self):
+			pass

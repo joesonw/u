@@ -1,0 +1,113 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		{% load dajaxice_templatetags %}
+		<meta charset="utf-8">
+		<title>注册</title>
+		<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
+		<script type="text/javascript"  src="/resources/bootstrap/js/bootstrap.min.js"></script>
+		<script src="http://code.jquery.com/jquery-1.8.3.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="/resources/css/register.html.css">
+		<script type="text/javascript" src="/resources/js/register.html.js"> </script>
+		
+ 	 	<script type="text/javascript" src="/resources/js/ajax-csrf.js"></script>
+  		<script src="/resources/dajax/jquery.dajax.core.js" type="text/javascript" charset="utf-8"></script>
+  		  {% dajaxice_js_import %}
+  		<script type="text/javascript">
+  			
+  			function go_to_step_two() {
+  				var regex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+  				if ($("input#Email").val()=="") {
+  					alert("email不能为空")
+  					return false;
+  				}
+  				if (regex.test($("input#Email").val())==false) {
+  					alert("email格式不正确，请重新输入")
+  					return false;
+  				}
+  				if ($("input#pwd").val()=="") {
+  					alert("密码不能为空")
+  					return false;
+  				}
+  				if ($("input#pwd").val().length<8) {
+  					alert("密码至少为8位")
+  					return false;
+  				}
+  				if ($("input#pwd").val()!=$("input#rpwd").val()) {
+  					return false;
+  				} else {
+  					
+  					Dajaxice.dajax_lib.register(go_step_two,{'email':$("input#Email").val(),'pwd':$("input#pwd").val()})
+  				}
+  				return false;
+  			}
+  			function go_step_two(data) {
+  				if (data.result==true) {
+  					$("div#step_one").hide()
+  					$("div#step_two").show()
+  					$("li#step_one button").removeClass("btn-primary")
+  					$("li#step_one button").addClass("btn-success")
+  					$("li#step_two button").addClass("btn-primary")
+  				} else {
+  					alert("注册失败，请重试")
+  				}
+  			}
+  			function go_to_step_three() {
+  				$('div#step_two').hide()
+  				$("li#step_two button").removeClass("btn-primary")
+  				$("li#step_two button").addClass("btn-success")
+  				$("li#step_three button").addClass("btn-primary")
+  			}
+  		</script>
+	</head>
+	<body>
+		<div id="register">
+			<div id="header">
+				<ul id="header">
+					<li class="header" id="step_one"><button class="btn disabled btn-primary">第一步－注册帐号</button></li>
+					<li class="header" id="step_two"><button class="btn disabled">第二步－连接社交平台</p></li>
+					<li class="header" id="step_three"><button class="btn disabled">第三步－完善个人信息</p></li>
+				</ul>
+			</div>
+			<div id="step_one">
+				<form class="form-horizontal" action="javascript:go_to_step_two()">
+					<div class="control-group">
+						<label class="control-label" for="Email">Email</label>
+						<div class="controls">
+					  		<input type="text" id="Email" placeholder="Email">
+						</div>
+				  	</div>
+				  	<div class="control-group">
+						<label class="control-label" for="pwd">密码</label>
+						<div class="controls">
+					  		<input type="password" id="pwd" placeholder="密码">
+						</div>
+				  	</div>
+				  	<div class="control-group">
+						<label class="control-label" for="rpwd">确认密码</label>
+						<div class="controls">
+					  		<input type="password" id="rpwd" placeholder="确认密码">
+					  		<span class="help-inline">请重复输入一次密码，两次输入需要一致。</span>
+						</div>
+				  	</div>
+				  	<div class="control-group">
+				  		<div class="controls">
+  							<button type="submit" class="btn btn-primary">下一步</button>
+  						</div>
+					</div>
+				</form>
+			</div>
+			<div id="step_two">
+				<ul>
+					<li style="list-style-type: none;"><button class='btn btn-large' style="width:248px;"><img src="../resources/images/icon-weibo-32.png"/>&nbsp;联接新浪微博账号</button></li>
+					<li style="list-style-type: none;"><button class='btn btn-large' style="width:248px;"><img src="../resources/images/icon-renren-32.png"/>&nbsp;&nbsp;&nbsp;&nbsp;联接人人网账号</button></li>
+					<li style="list-style-type: none;"><button class='btn btn-large' style="width:248px;"><img src="../resources/images/icon-t-32.png"/>&nbsp;联接腾讯微博账号</button></li>
+				</ul>
+				<button type="button" class="btn btn-primary" onclick="go_to_step_three()">下一步</button>
+			</div>
+		</div>
+	</body>
+
+
+</html>
